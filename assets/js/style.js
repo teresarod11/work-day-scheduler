@@ -15,21 +15,25 @@
 // variables that are needed
 var btnSave = $('.saveBtn');
 
-
+// function that wraps around everything 
 $(function(){ 
-    
-    var today = dayjs(today).format('dddd, MMMM DD, YYYY, h:mm:ss a'); 
-    $('#currentDay').text(today);
 
+    function displayTime() {
+        var currentDay = $('#currentDay'); 
+        var rightNow = dayjs().format('MMMM DD, YYYY [at] hh:mm A');
+        currentDay.text(rightNow);
+      }
+   
     btnSave.on("click", function (event) {
         event.preventDefault();
         var value = $(this).siblings('.description').val();
+        console.log(value)
         var time = $(this).parent().attr('id');
        localStorage.setItem(time, value);
        console.log(event);
     });
 
-     $("#hour-9 .description").val(localStorage.getItem("hour-9"));
+    $("#hour-09 .description").val(localStorage.getItem("hour-09"));
     $("#hour-10 .description").val(localStorage.getItem("hour-10"));
     $("#hour-11 .description").val(localStorage.getItem("hour-11"));
     $("#hour-12 .description").val(localStorage.getItem("hour-12"));
@@ -38,25 +42,22 @@ $(function(){
     $("#hour-15 .description").val(localStorage.getItem("hour-15"));
     $("#hour-16 .description").val(localStorage.getItem("hour-16"));
     $("#hour-17 .description").val(localStorage.getItem("hour-17"));
-
-    function timeTracker(){  
-    var currentTime = $('.time-block');
-    
-    console.log(currentTime);
-   
-    var a = currentTime.attr('id').substring(5);
-    console.log(currentTime.attr('id').substring(5));
-    var b = dayjs('today').format('HH MM');
-
-    if (a<b) {
-        currentTime.addClass('past');
-    } else if (a===b) {  
-        currentTime.addClass('present');
+  
+   $('.time-block').each(function(){
+    var block = $(this).attr('id').split('-')[1];
+    // console.log(block);
+    var time = dayjs().format('HH');
+    // console.log(time);
+    if (block===time) {
+        $(this).addClass('present');
+    } else if (block<time) {  
+        $(this).addClass('past');
     } else {
-        currentTime.addClass('future');
+        $(this).addClass('future');
     }
-    }
-   timeTracker();
-});
+        });
 
-// retrieve id 
+    displayTime();
+
+    }); 
+    
